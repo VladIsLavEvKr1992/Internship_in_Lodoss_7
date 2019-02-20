@@ -1,5 +1,3 @@
-// !!!ЗАДАЧА ПРО ФИРМУ!!!
-
 /*
 В фирме есть директор, который отвечает за набор сотрудников и получение новых проектов.
 В фирме также есть 3 отдела: веб отдел, мобильный отдел и отдел тестирования в которых 
@@ -31,24 +29,12 @@ QA специалист тратит на тестирование проект�
 нет проектов и нет программистов.
 */
 
-// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-// класс Директор
+// Класс Директор
 class Director {
 	constructor() {
 		this.projectsWeb = []; // мобильные проекты
 		this.projectsMobile = []; // веб проекты
-		this.projectsTest = []; // проекты для теста
-
-		this.webDevelopers = 0; // веб разработчики
-		this.mobileDevelopers = 0; // мобильные разработчики
-		this.testExperts = 0; // тестировщики
-
-		this.hiredEmployees = 0; // нанятые сотрудники
-		this.firedEmployees = 0; // уволенные сотрудники
-		this.freeEmployees = 0; // не занятые сотрудники
-
 		this.projectGenerator = new ProjectsGenerator(); // запускаем генератор проектов
-
 		self = this; // для доступа к методам внутри класса
 	}
 
@@ -72,9 +58,9 @@ class Director {
 
 				// распределяем проекты по отделам
 				if (currentType == "web") {
-					self.addProjectWeb(currentName, currentType, currentDifficulty);
+					self.addProjectWeb(this.day, currentName, currentType, currentDifficulty);
 				} else {
-					self.addProjectMobile(currentName, currentType, currentDifficulty);
+					self.addProjectMobile(this.day, currentName, currentType, currentDifficulty);
 				}
 			}
 			this.day++;
@@ -88,19 +74,21 @@ class Director {
 	}
 
 	// проекты в веб отдел
-	addProjectWeb(projectName, projectType, projectDifficulty) {
+	addProjectWeb(projectDay, projectName, projectType, projectDifficulty) {
+		this.projectDay = projectDay;
 		this.projectName = projectName;
 		this.projectType = projectType;
 		this.projectDifficulty = projectDifficulty;
-		this.projectsWeb.push([this.projectName, this.projectType, this.projectDifficulty]);
+		this.projectsWeb.push([this.projectDay, this.projectName, this.projectType, this.projectDifficulty]);
 	}
 
 	// проекты в мобильный отдел
-	addProjectMobile(projectName, projectType, projectDifficulty) {
+	addProjectMobile(projectDay, projectName, projectType, projectDifficulty) {
+		this.projectDay = projectDay;
 		this.projectName = projectName;
 		this.projectType = projectType;
 		this.projectDifficulty = projectDifficulty;
-		this.projectsMobile.push([this.projectName, this.projectType, this.projectDifficulty]);
+		this.projectsMobile.push([this.projectDay, this.projectName, this.projectType, this.projectDifficulty]);
 	}
 
 	// получить массив с веб проектами
@@ -114,189 +102,6 @@ class Director {
 	}
 }
 
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-// класс Веб Отдел
-class WebDepartment {
-	constructor() {
-		this.projectsWeb = [];
-		this.completedProjects = [];
-		this.freeEmployees = [];
-		this.counterHiredEmployees = 0; // счетчки нанятых сотрудников
-		this.counterFiredEmployees = 0; // счетчки уволенных сотрудников
-	}
-
-	takeData(directorObject) {
-		this.directorObject = directorObject;
-		this.projectsWeb = directorObject.projectsWeb;
-	}
-
-	getData() {
-		return this.projectsWeb;
-	}
-}
-
-// класс мобильный Отдел
-class MobileDepartment {
-	constructor() {
-		this.projectsMobile = [];
-		this.completedProjects = [];
-		this.freeEmployees = [];
-		this.counterHiredEmployees = 0; // счетчки нанятых сотрудников
-		this.counterFiredEmployees = 0; // счетчки уволенных сотрудников
-	}
-
-	takeData(directorObject) {
-		this.directorObject = directorObject;
-		this.projectsMobile = directorObject.projectsMobile;
-	}
-
-	getData() {
-		return this.projectsMobile;
-	}
-}
-
-// класс Отдел Тестирования
-class TestDepartment {
-	constructor() {
-		this.projectsTest = [];
-		this.completedProjects = [];
-		this.freeEmployees = [];
-		this.counterHiredEmployees = 0; // счетчки нанятых сотрудников
-		this.counterFiredEmployees = 0; // счетчки уволенных сотрудников
-	}
-
-	takeData(directorObject) {
-		this.directorObject = directorObject;
-	}
-
-	getData() {
-		return this.projectsTest;
-	}
-
-}
-
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-// класс Веб разработчик
-class WebDeveloper {
-	constructor() {
-		// [Работник, Счетчики]
-		this.webDevelopers = []; // веб разработчики
-		
-		this.counterProjects = 0; // счетчик выполненных проектов
-		this.counterDayOff = 0; // счетчик дней без работы
-	}
-
-	// считаем выполненные проекты
-	countProjects() {
-		this.counterProjects++;
-		return this;
-	}
-
-	// считаем дни без работы
-	countDayOff() {
-		this.counterDayOff++;
-		return this;
-	}
-}
-
-// класс Веб разработчик
-class MobileDeveloper {
-	constructor() {
-		// [Работник, Счетчики]
-		this.mobileDevelopers = []; // мобильные разработчики
-		
-		this.counterProjects = 0; // счетчик выполненных проектов
-		this.counterDayOff = 0; // счетчик дней без работы
-	}
-
-	// считаем выполненные проекты
-	countProjects() {
-		this.counterProjects++;
-		return this;
-	}
-
-	// считаем дни без работы
-	countDayOff() {
-		this.counterDayOff++;
-		return this;
-	}
-}
-
-// класс Веб разработчик
-class TestExpert {
-	constructor() {
-		// [Работник, Счетчики]
-		this.testExperts = []; // тестировщики
-
-		this.counterProjects = 0; // счетчик выполненных проектов
-		this.counterDayOff = 0; // счетчик дней без работы
-	}
-
-	// считаем выполненные проекты
-	countProjects() {
-		this.counterProjects++;
-		return this;
-	}
-
-	// считаем дни без работы
-	countDayOff() {
-		this.counterDayOff++;
-		return this;
-	}
-}
-
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-// класс веб проект
-class WebProject {
-	constructor() {
-	// [Проект, Работник]
-	}
-
-	// назначить сотрудника
-	appointEmployee(employee) {
-		this.employee = employee;
-		return this;
-	}
-
-	
-}
-
-// класс веб проект
-class MobileProject {
-	constructor() {
-	// [Проект, Работник]
-	}
-
-	// назначить сотрудника
-	appointEmployee(employee) {
-		this.employee = employee;
-		return this;
-	}
-}
-
-
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-// класс Статистика (для вывода результатов, итоговое решение)
-class Statistic {
-	constructor() {
-
-	}
-
-	takeData(directorObject, webDepartmentObject, mobileDepartmentObject, 
-		testDepartmentObject) {
-		this.directorObject = directorObject;
-		this.webDepartmentObject = webDepartmentObject;
-		this.mobileDepartmentObject = mobileDepartmentObject;
-		this.testDepartmentObject = testDepartmentObject;
-	}
-
-	addStatistic() {
-		
-	}
-}
-
-
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 // класс Генератор Проектов
 class ProjectsGenerator {
 	constructor() {
@@ -346,29 +151,97 @@ class ProjectsGenerator {
 	}
 }
 
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+
+// Класс Отдел (родитель)
+class Department {
+	constructor() {
+		this.projectsWeb = []; // мобильные проекты
+		this.projectsMobile = []; // веб проекты
+		this.completedProjects = [];
+		this.freeEmployees = [];
+		this.counterHiredEmployees = 0; // счетчки нанятых сотрудников
+		this.counterFiredEmployees = 0; // счетчки уволенных сотрудников
+	}
+
+	takeData(directorObject) {
+		this.directorObject = directorObject;
+		this.projectsWeb = directorObject.projectsWeb;
+	}
+
+	getData() {
+		return this.projectsWeb;
+	}
+}
+
+
+
+// Класс Сотрудник
+class Employee {
+	constructor() {
+		this.employees = [];
+		this.counterProjects = 0; // счетчик выполненных проектов
+		this.counterDayOff = 0; // счетчик дней без работы
+	}
+
+	countProjects() {
+		this.counterProjects++;
+		return this;
+	}
+
+	countDayOff() {
+		this.counterDayOff++;
+		return this;
+	}
+}
+
+
+// класс веб проект
+class Project {
+	constructor(typeProject, difficultyProject) {
+		this.typeProject = typeProject;
+		this.difficultyProject = difficultyProject;
+	}
+}
+
+
 function launch() {
-	const director = new Director(),
-	webDepartment = new WebDepartment(),
-	mobileDepartment = new MobileDepartment(),
-	testDepartment = new TestDepartment(),
-	statistic = new Statistic();
+	const director = new Director();
 	
 	director.work(2); // фирма работает 2 дня!!!
 	director.addProject();
 
-	webDepartment.takeData(director);
-	mobileDepartment.takeData(director);
-	testDepartment.takeData(director);
-	statistic.takeData(director, webDepartment, mobileDepartment, testDepartment);
-
-	console.log("");
-	console.log("Веб проекты из Веб отдела:");
-	console.log(webDepartment.getData());
-	console.log("Мобильные проекты из Мобильного отдела:");
-	console.log(mobileDepartment.getData());
-
-	
 }
 
 launch();
+
+
+// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+// ВСЕ ЧТО КАСАЕТСЯ ПРОЕКТА
+
+// генератор случайных чисел
+function generateNumber(min, max) {
+	return Math.floor(min + Math.random() * (max + 1 - min));;
+}
+
+// генерируем тип проекта
+function generateType() {
+	let arrayType = ["web", "mobile"],
+	indexType = generateNumber(0, 1);
+	return arrayType[indexType];
+}
+
+console.log(generateNumber(1, 4)); // количество проектов
+console.log(generateNumber(1, 3)); // сложность проекта
+
+
+// генерируем новый проект
+function generateProject() {
+	return new Project(generateType(), generateNumber(1, 3));
+}
+
+// проверка работы функции добавления нового проекта
+var arrayTest = [];
+
+arrayTest.push(generateProject());
+
+console.log(arrayTest);
