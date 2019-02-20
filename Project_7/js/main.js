@@ -31,171 +31,49 @@ QA специалист тратит на тестирование проект�
 
 // Класс Директор
 class Director {
-	constructor() {
-		this.projectsWeb = []; // мобильные проекты
-		this.projectsMobile = []; // веб проекты
-		this.projectGenerator = new ProjectsGenerator(); // запускаем генератор проектов
-		self = this; // для доступа к методам внутри класса
+	constructor(nameDirector) {
+		this.nameDirector = nameDirector;
+		this.projects = [];
+		this.departments = [];
 	}
 
-	work(day) {
-		this.lastDay = day; // сколько дней работает фирма
-		this.day = 1;
+	// добавить проект
+	takeProject(numberProject) {
+		for (let i = 0; i < numberProject; i++) {
+			this.projects.push(generateProject());
+		}
 	}
 
-	// метод добавляющий новые проекты (имя проекта, сложность проекта)
-	addProject() {
-		let currentType, currentDifficulty, currentName = 0;
+	// добавить отдел
+	addDepartment(department) {
+		this.departments.push(department);
+	}
+
+	// передать проект в отдел
+	transferToDepartments() {
+		this.departments.forEach(function(department) {
+
+		});
+	}
+
+	// тип отдела
+	addDepartmentType(typeDepartment) {
 		
-		// генерируем проекты
-		while(this.day <= this.lastDay) {
-			this.projectGenerator.generateNumber();
-			
-			for (let i = 1; i <= this.projectGenerator.numberProjects; i++) {
-				currentName++;
-				currentType = this.projectGenerator.generateType();
-				currentDifficulty = this.projectGenerator.generateDifficulty();
-
-				// распределяем проекты по отделам
-				if (currentType == "web") {
-					self.addProjectWeb(this.day, currentName, currentType, currentDifficulty);
-				} else {
-					self.addProjectMobile(this.day, currentName, currentType, currentDifficulty);
-				}
-			}
-			this.day++;
-			console.log("Количество проектов за день:");
-			console.log(this.projectGenerator.numberProjects);
-		}
-		console.log("Веб проекты.");
-		console.log(self.projectsWeb);
-		console.log("Мобильные проекты.");
-		console.log(self.projectsMobile);
 	}
 
-	// проекты в веб отдел
-	addProjectWeb(projectDay, projectName, projectType, projectDifficulty) {
-		this.projectDay = projectDay;
-		this.projectName = projectName;
-		this.projectType = projectType;
-		this.projectDifficulty = projectDifficulty;
-		this.projectsWeb.push([this.projectDay, this.projectName, this.projectType, this.projectDifficulty]);
+	// нанять сотрудника
+	hireEmployee() {
+
 	}
 
-	// проекты в мобильный отдел
-	addProjectMobile(projectDay, projectName, projectType, projectDifficulty) {
-		this.projectDay = projectDay;
-		this.projectName = projectName;
-		this.projectType = projectType;
-		this.projectDifficulty = projectDifficulty;
-		this.projectsMobile.push([this.projectDay, this.projectName, this.projectType, this.projectDifficulty]);
+	// уволить сотрудника
+	layOffEmployee() {
+
 	}
 
-	// получить массив с веб проектами
-	getProjectsWeb() {
-		return this.projectsWeb;
-	}
-
-	// получить массив с мобильными проектами
-	getProjectsMobile() {
-		return this.projectsMobile;
-	}
 }
 
-// класс Генератор Проектов
-class ProjectsGenerator {
-	constructor() {
-		this.numberProjects = 0;
-		this.projectType = undefined;
-		this.projectDifficulty = undefined;
-	}
-
-	// генерируем количество проектов
-	generateNumber() {
-		const numberMIN = 0, numberMAX = 4;
-		this.numberProjects = Math.floor(numberMIN + Math.random() * (numberMAX + 1 - numberMIN));
-		return this.numberProjects;
-	}
-
-	// генерируем тип проекта
-	generateType() {
-		const typeMIN = 1, typeMAX = 2;
-		let intermediateValue;
-		// генерируем промежуточное значение
-		intermediateValue = Math.floor(typeMIN + Math.random() * (typeMAX + 1 - typeMIN));
-		if (intermediateValue == 1) {
-			this.projectType = "mobile";
-		}
-		if (intermediateValue == 2) {
-			this.projectType = "web";
-		}
-		return this.projectType;
-	}
-
-	// генерируем сложность проекта
-	generateDifficulty() {
-		const difficultyMIN = 1, difficultyMAX = 3;
-		let intermediateValue;
-		// генерируем промежуточное значение
-		intermediateValue = Math.floor(difficultyMIN + Math.random() * (difficultyMAX + 1 - difficultyMIN));
-		if (intermediateValue == 1) {
-			this.projectDifficulty = "easy";
-		}
-		if (intermediateValue == 2) {
-			this.projectDifficulty = "medium";
-		}
-		if (intermediateValue == 3) {
-			this.projectDifficulty = "hard";
-		}
-		return this.projectDifficulty;
-	}
-}
-
-
-// Класс Отдел (родитель)
-class Department {
-	constructor() {
-		this.projectsWeb = []; // мобильные проекты
-		this.projectsMobile = []; // веб проекты
-		this.completedProjects = [];
-		this.freeEmployees = [];
-		this.counterHiredEmployees = 0; // счетчки нанятых сотрудников
-		this.counterFiredEmployees = 0; // счетчки уволенных сотрудников
-	}
-
-	takeData(directorObject) {
-		this.directorObject = directorObject;
-		this.projectsWeb = directorObject.projectsWeb;
-	}
-
-	getData() {
-		return this.projectsWeb;
-	}
-}
-
-
-
-// Класс Сотрудник
-class Employee {
-	constructor() {
-		this.employees = [];
-		this.counterProjects = 0; // счетчик выполненных проектов
-		this.counterDayOff = 0; // счетчик дней без работы
-	}
-
-	countProjects() {
-		this.counterProjects++;
-		return this;
-	}
-
-	countDayOff() {
-		this.counterDayOff++;
-		return this;
-	}
-}
-
-
-// класс веб проект
+// класс Проект
 class Project {
 	constructor(typeProject, difficultyProject) {
 		this.typeProject = typeProject;
@@ -203,21 +81,44 @@ class Project {
 	}
 }
 
+// класс Отдел
+class Department {
+	constructor(typeDepartment) {
+		this.typeDepartment = typeDepartment;	
+		this.projects = [];
+		this.employees = [];
 
-function launch() {
-	const director = new Director();
+		this.typeArray = ["mobile", "web", "test"];
+	}
+
+	// назначить сотрудника на проект
+	appointEmployee(project) {
+	}
+
+	// вычислить количество отработанных дней
+	countDayWork() {
+		
+	}
 	
-	director.work(2); // фирма работает 2 дня!!!
-	director.addProject();
+	// вычислить количество дней без работы
+	countDayOff() {
 
+	}
 }
 
-launch();
+// класс Сотрудник
+class Employee {
+	constructor(profession) {
+		this.profession = profession;
+		this.counterProjects = 0; // счетчик выполненных проектов
+		this.counterDayOff = 0; // счетчик дней без работы
+
+		this.typeArray = ["mobile", "web", "test"];
+	}
+}
 
 
-// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 // ВСЕ ЧТО КАСАЕТСЯ ПРОЕКТА
-
 // генератор случайных чисел
 function generateNumber(min, max) {
 	return Math.floor(min + Math.random() * (max + 1 - min));;
@@ -230,18 +131,25 @@ function generateType() {
 	return arrayType[indexType];
 }
 
-console.log(generateNumber(1, 4)); // количество проектов
-console.log(generateNumber(1, 3)); // сложность проекта
-
-
 // генерируем новый проект
 function generateProject() {
 	return new Project(generateType(), generateNumber(1, 3));
 }
 
-// проверка работы функции добавления нового проекта
-var arrayTest = [];
+// запуск программы
+function launch(day) {
+	var director = new Director("Name Surname");
 
-arrayTest.push(generateProject());
 
-console.log(arrayTest);
+
+	// для работы фирмы day дней
+	for (let i = 1; i <= day; i++) {
+		director.takeProject(generateNumber(1, 4)); // принимаем количество проектов на реализацию
+	}
+
+
+	console.log(director);
+}
+
+// запустить фирму
+launch(1);
