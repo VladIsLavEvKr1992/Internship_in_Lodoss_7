@@ -37,33 +37,42 @@ class Director {
 		this.departments = [];
 	}
 
-	// добавить проект
+	// добавить проекты
 	takeProject(numberProject) {
 		for (let i = 0; i < numberProject; i++) {
 			this.projects.push(generateProject());
 		}
 	}
 
-	// добавить отдел
+	// добавить отделы
 	addDepartment(department) {
 		this.departments.push(department);
 	}
 
-	// передать проект в отдел
+	// не работает!!!
+	// передать проект в отделы (вырезать из массива проектов нужный и поместить в департамент)
 	transferToDepartments() {
-		this.departments.forEach(function(department) {
-
+		let projects = [];
+		this.departments.forEach((department) => {
+			this.projects.forEach((item, i) => {
+				projects = this.projects.splice(i, 1);
+			});
 		});
+		this.projects = projects;
 	}
 
-	// тип отдела
-	addDepartmentType(typeDepartment) {
-		
-	}
-
-	// нанять сотрудника
+		// не знаю, как распределить сотрудников!!!
+		// нанять сотрудника
 	hireEmployee() {
+		// если есть проекты на реализацию
+		if (this.projects.length > 0) {
+			// перебираем проекты и смотрим в какие отделы нужно нанимать сотрудников
+			this.projects.forEach((project) => {
+				this.departments.forEach((item, i) => {
 
+				});
+			});
+		}
 	}
 
 	// уволить сотрудника
@@ -87,12 +96,11 @@ class Department {
 		this.typeDepartment = typeDepartment;	
 		this.projects = [];
 		this.employees = [];
-
-		this.typeArray = ["mobile", "web", "test"];
 	}
 
 	// назначить сотрудника на проект
 	appointEmployee(project) {
+
 	}
 
 	// вычислить количество отработанных дней
@@ -112,13 +120,11 @@ class Employee {
 		this.profession = profession;
 		this.counterProjects = 0; // счетчик выполненных проектов
 		this.counterDayOff = 0; // счетчик дней без работы
-
-		this.typeArray = ["mobile", "web", "test"];
 	}
 }
 
 
-// ВСЕ ЧТО КАСАЕТСЯ ПРОЕКТА
+
 // генератор случайных чисел
 function generateNumber(min, max) {
 	return Math.floor(min + Math.random() * (max + 1 - min));;
@@ -136,20 +142,24 @@ function generateProject() {
 	return new Project(generateType(), generateNumber(1, 3));
 }
 
+
 // запуск программы
 function launch(day) {
-	var director = new Director("Name Surname");
-
-
+	const director = new Director("Name Surname"),
+	typeArray = ["mobile", "web", "test"];
 
 	// для работы фирмы day дней
 	for (let i = 1; i <= day; i++) {
 		director.takeProject(generateNumber(1, 4)); // принимаем количество проектов на реализацию
 	}
 
+	// добавляем три отдела
+	typeArray.forEach(function(element) {
+		director.addDepartment(new Department(element));
+	});
 
 	console.log(director);
 }
 
-// запустить фирму
+// запустить фирму на day дней
 launch(1);
